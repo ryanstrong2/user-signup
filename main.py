@@ -14,35 +14,70 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-# The form elements where the user inputs their username, password, password again, and email address must be named "username", "password", "verify", and "email", respectively.
+#
+# The form elements where the user inputs their username, password, password
+# again, and email address must be named "username", "password", "verify", and "email", respectively.
 # The form method must be POST, not GET.
 # Upon invalid user input, your web app should re-render the form for the user.
 # Upon valid user input, your web app should redirect to a welcome page for the user.
 #
 #     This page must include both "Welcome" and the user's username.
-#
+# database is locked?
 
 import webapp2
 import cgi
 import re
+form = """
+<form method = "post" action="/form">
+    <label>
+        Username
+        <input name="username">
+    </label>
+    <br>
+    <label>
+        Password
+        <input type="password" name="password">
+    </label>
+    <br>
+    <label>
+        Verfiy password
 
+        <input type="password" name="verify">
+    </label>
+    <br>
+    <label>
+        E-mail (optional)
+        <input type ="emial" name="email">
+    </label>
+    <br>
+    <div style ="color: red">%(error)s</div>
+    <br>
+    <input type="submit">
+</form>
+"""
 class MainHandler(webapp2.RequestHandler):
-    def post(self):
-        self.response.write('Welcome', username)
-    if not (username and password and verify):
-        self.form("Not a valid username.")
-    else:
-        self.redirect('/welcome')
+    def write_form(self):
+        self.response.out.write(form %{'Welcome', username})
+    def get(self):
+        self.response.out.write(form)
+        # self.write_form()
 
+    # def post(self):
+    #
+    # if not (username and password and verify):
+    #     self.form("Not a valid username.")
+    # else:
+    #     self.redirect('/welcome')
+    #
+    #
+    # # Username: "^[a-zA-Z0-9_-]{3,20}$"
+    # Password: "^.{3,20}$"
+    # Email: "^[\S]+@[\S]+.[\S]+$"
+#
+# USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
+# def valid_username(username):
+    # retrun USER_RE.match(username)
 
-    Username: "^[a-zA-Z0-9_-]{3,20}$"
-    Password: "^.{3,20}$"
-    Email: "^[\S]+@[\S]+.[\S]+$"
-
-USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
-def valid_username(username):
-    retrun USER_RE.match(username)
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
 ], debug=True)
